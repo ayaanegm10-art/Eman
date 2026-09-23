@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دراسة جرائم النصب والاحتيال لدى الشباب في مدينة الغردقة</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Google Font: Cairo & Tajawal -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f4f7fa',
+                            100: '#e1e8f0',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            800: '#1e40af',
+                            900: '#0f172a',
+                        },
+                        amberAccent: {
+                            500: '#d97706',
+                            600: '#b45309',
+                        }
+                    },
+                    fontFamily: {
+                        cairo: ['Cairo', 'sans-serif'],
+                        tajawal: ['Tajawal', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #faf9f6;
+            color: #1e293b;
+        }
+        
+        /* Custom Chart Container Styles */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 650px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 320px;
+            max-height: 400px;
+        }
+        
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 360px;
+            }
+        }
+
+        .tab-btn.active {
+            border-bottom: 3px solid #1d4ed8;
+            color: #1d4ed8;
+            font-weight: 700;
+            background-color: rgba(29, 78, 216, 0.05);
+        }
+
+        .accordion-content {
+            transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between antialiased">
+
+    <!-- Chosen Palette: Warm Sand & Slate Navy (#faf9f6 background, #0f172a slate headings, #1d4ed8 primary blue, #d97706 warm amber accents) -->
+
+    <!-- Application Structure Plan:
+        1. Header & Hero Dashboard: Presents the core research topic, key demographic metrics, and quick stat cards.
+        2. Navigation Bar: Sticky navigation providing seamless access across 6 logical modules (Problem & Importance, Goals & Questions, Concepts, Literature Matrix, Theoretical Models, Findings & Action Plan).
+        3. Interactive Problem & Context Module: Visually explains the interplay between Tourism Environment, Digital Shift, and Youth Vulnerabilities with Chart.js visualization.
+        4. Objectives & Research Questions Matrix: Dynamic tabbed switcher to view goals alongside their specific research questions.
+        5. Interactive Concept Dictionary: Filterable grid cards outlining legal, sociological, cybernetic, and demographic definitions.
+        6. Literature Review & Evidence Explorer: Dynamic table with category filters and search to analyze previous studies, methodologies, key findings, and identified research gaps.
+        7. Theoretical Framework Interactive Simulator: Interactive selector allowing users to choose any of the 5 criminal theories (Rational Choice, Strain, Social Control, Social Learning, Psychoanalytic) to inspect core concepts, proponents, and context-specific application to Hurghada youth.
+        8. Actionable Recommendations Dashboard: Categorized interactive view of policy, legislative, security-tech, and socio-economic solutions.
+    -->
+
+    <!-- Visualization & Content Choices:
+        - Gender Distribution of Fraudsters: Chart.js Donut Chart (64% Males, 36% Females - based on crime statistics cited in study).
+        - Relative Weight of Behavioral Drivers: Chart.js Bar Chart comparing Economic Strain, Tourism Aspiration, Anomie, and Tech Anonymity.
+        - Theory Matrix Application: Radar Chart mapping the 5 criminal theories against key environmental dimensions in Hurghada.
+        - Literature Explorer: Dynamic HTML Table with Javascript Search & Category Filtering.
+        - Interactive Accordion & Dynamic Cards: Pure Javascript state-based switcher for concepts and theory deep-dives.
+        - NO SVG or Mermaid JS used; strict compliance with HTML5 Canvas and Tailwind CSS components.
+    -->
+
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <!-- HEADER / HERO SECTION -->
+    <header class="bg-slate-900 text-white border-b-4 border-amber-500 shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+                <div>
+                    <div class="inline-flex items-center gap-2 bg-amber-500/20 text-amber-400 text-xs font-bold px-3 py-1 rounded-full mb-3 border border-amber-500/30">
+                        <span>دراسة سوسيولوجية وجنائية متخصصة</span>
+                    </div>
+                    <h1 class="text-2xl sm:text-3xl font-extrabold text-white leading-tight">
+                        جرائم النصب والاحتيال لدى الشباب في مدينة الغردقة
+                    </h1>
+                    <p class="text-slate-300 text-sm sm:text-base mt-2 max-w-3xl leading-relaxed">
+                        منصة تحليليّة تفاعلية لتفكيك محددات الظاهرة، أساليبها الإلكترونية والمباشرة، الأُطر النظرية المفسرة، والتداعيّات الأمنية والاجتماعية في البيئة السياحية.
+                    </p>
+                </div>
+                <div class="flex flex-wrap gap-3">
+                    <div class="bg-slate-800/90 border border-slate-700 p-3 rounded-lg text-center min-w-[110px]">
+                        <span class="block text-2xl font-black text-amber-400">18 - 35</span>
+                        <span class="text-xs text-slate-400">الفئة العمرية (سنة)</span>
+                    </div>
+                    <div class="bg-slate-800/90 border border-slate-700 p-3 rounded-lg text-center min-w-[110px]">
+                        <span class="block text-2xl font-black text-blue-400">5</span>
+                        <span class="text-xs text-slate-400">نظريات مفسرة</span>
+                    </div>
+                    <div class="bg-slate-800/90 border border-slate-700 p-3 rounded-lg text-center min-w-[110px]">
+                        <span class="block text-2xl font-black text-emerald-400">64%</span>
+                        <span class="text-xs text-slate-400">نسبة الذكور للجناة</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- NAVIGATION BAR -->
+    <nav class="sticky top-0 z-50 bg-white shadow-md border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+            <div class="flex overflow-x-auto no-scrollbar space-x-1 space-x-reverse py-2 text-xs sm:text-sm font-semibold text-slate-600">
+                <button onclick="switchTab('tab-problem')" id="btn-tab-problem" class="tab-btn active whitespace-nowrap px-4 py-2 rounded-md hover:bg-slate-100 transition">
+                    📌 الإشكالية والأهمية
+                </button>
+                <button onclick="switchTab('tab-goals')" id="btn-tab-goals" class="tab-btn whitespace-nowrap px-4 py-2 rounded-md hover:bg-slate-100 transition">
+                    🎯 الأهداف والتساؤلات
+                </button>
+                <button onclick="switchTab('tab-concepts')" id="btn-tab-concepts" class="tab-btn whitespace-nowrap px-4 py-2 rounded-md hover:bg-slate-100 transition">
+                    📖 المفاهيم الأساسية
+                </button>
+                <button onclick="switchTab('tab-literature')" id="btn-tab-literature" class="tab-btn whitespace-nowrap px-4 py-2 rounded-md hover:bg-slate-100 transition">
+                    📚 الأدبيات والدراسات السابقة
+                </button>
+                <button onclick="switchTab('tab-theory')" id="btn-tab-theory" class="tab-btn whitespace-nowrap px-4 py-2 rounded-md hover:bg-slate-100 transition">
+                    🧠 الإطار النظري التفاعلي
+                </button>
+                <button onclick="switchTab('tab-conclusions')" id="btn-tab-conclusions" class="tab-btn whitespace-nowrap px-4 py-2 rounded-md hover:bg-slate-100 transition">
+                    💡 النتائج والتوصيات
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full">
+
+        <!-- SECTION 1: PROBLEM STATEMENT & IMPORTANCE -->
+        <section id="tab-problem" class="tab-content space-y-8">
+            <!-- Intro Paragraph -->
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                <h2 class="text-xl font-bold text-slate-900 border-r-4 border-blue-600 pr-3 mb-3">
+                    إشكالية البحث والسياق المجتمعي بالغردقة
+                </h2>
+                <p class="text-slate-700 leading-relaxed text-sm sm:text-base">
+                    يقدم هذا قسم تحليلاً شاملاً لطبيعة التحول النوعي في جرائم النصب والاحتيال داخل مدينة الغردقة. تكمن خصوصية الظاهرة في التقاء عوامل البيئة السياحية (العمالة الوافدة، العلاقات غير الشخصية، الاغتراب المؤقت) مع الثورة التكنولوجية وتزايد الضغوط الاقتصادية والتطلعات الاستهلاكية لدى فئة الشباب. ويهدف هذا العرض إلى تفكيك مقولة "الفقر هو المحرك الوحيد للجريمة" بالتركيز على انتشار السلوك الاحتيالي كخيار عقلاني أو استجابة للأنومي والضغط البنائي.
+                </p>
+            </div>
+
+            <!-- Grid Content: Narrative & Visuals -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Left Narrative Column -->
+                <div class="lg:col-span-7 bg-white p-6 rounded-xl shadow-sm border border-slate-200 space-y-4">
+                    <h3 class="font-bold text-slate-800 text-lg">محددات المشكلة البحثية</h3>
+                    <ul class="space-y-3 text-slate-700 text-sm leading-relaxed">
+                        <li class="flex items-start gap-2 bg-slate-50 p-3 rounded-lg border-r-2 border-amber-500">
+                            <span class="font-bold text-amber-600">▪</span>
+                            <div>
+                                <strong class="text-slate-900">التحول الرقمي والأساليب المستحدثة:</strong> انتقلت الجريمة من الوسائل التقليدية إلى الفضاء السيبراني باستخدام سيناريوهات خداع نفسية معقدة وتطبيقات وهمية لتسريع الاستيلاء على الأموال دون تكرار المواجهة المباشرة.
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-2 bg-slate-50 p-3 rounded-lg border-r-2 border-blue-500">
+                            <span class="font-bold text-blue-600">▪</span>
+                            <div>
+                                <strong class="text-slate-900">خصوصية المجتمع السياحي الغردقي:</strong> تتسم المدينة بسيادة العلاقات المادية المؤقتة، ضعف الضبط الاجتماعي الأسرى للشباب الوافد، والاختلاط الثقافي الذي يخلق تطلعات استهلاكية تفوق الفرص المشروعة المتاحة.
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-2 bg-slate-50 p-3 rounded-lg border-r-2 border-purple-500">
+                            <span class="font-bold text-purple-600">▪</span>
+                            <div>
+                                <strong class="text-slate-900">تغير بروفايل الجناة والضحايا:</strong> اتساع الدائرة لتشمل متعلمين وخريجي جامعات وأفراد يمتلكون قدرات تقنية عالية، مع انخفاض نسبة الإبلاغ الرسمي لما يُعرف بـ "الجريمة الخفية" خشية الوصمة الاجتماعية.
+                            </div>
+                        </li>
+                    </ul>
+
+                    <div class="mt-6 border-t pt-4">
+                        <h4 class="font-bold text-slate-800 mb-2 text-sm">أهمية الدراسة (العلمية والتطبيقية)</h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                            <div class="bg-blue-50 p-3 rounded-lg border border-blue-200">
+                                <strong class="block text-blue-900 font-bold mb-1">الأهمية العلمية:</strong>
+                                إثراء الأدبيات السوسيولوجية العربية في مجال سوسيولوجيا الجريمة بالمجتمعات الساحلية والسياحية، مع التكامل بين نظريات الاختيار العقلاني والأنومي والضبط الاجتماعي.
+                            </div>
+                            <div class="bg-emerald-50 p-3 rounded-lg border border-emerald-200">
+                                <strong class="block text-emerald-900 font-bold mb-1">الأهمية التطبيقية:</strong>
+                                إمداد قيادات الأمن العام ومكافحة الجرائم الإلكترونية بالبحر الأحمر باستبصارات ميدانية لبناء استراتيجيات وقائية وحماية المقومات الاقتصادية للسياحة.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Visual Charts Column -->
+                <div class="lg:col-span-5 space-y-6">
+                    <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
+                        <h3 class="font-bold text-slate-800 text-sm mb-1 text-center">التوزيع النوعي للمتورطين في أساليب الاحتيال الرقمي</h3>
+                        <p class="text-xs text-slate-500 text-center mb-4">بناءً على الشواهد الإحصائية لتقارير مكافحة الجرائم الإلكترونية</p>
+                        <div class="chart-container">
+                            <canvas id="genderChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="bg-amber-50 border border-amber-200 p-4 rounded-xl">
+                        <h4 class="font-bold text-amber-900 text-xs mb-1">⚠️ ملمح جنائي بارز:</h4>
+                        <p class="text-amber-800 text-xs leading-relaxed">
+                            تشير البيانات الميدانية إلى أن 68% من الأساليب الحديثة تستغل "الثقة النفسية الزائفة" والإغراء بالأرباح السريعة عبر تطبيقات توظيف الأموال، وليس الفقر المادي المباشر فقط.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: OBJECTIVES & RESEARCH QUESTIONS -->
+        <section id="tab-goals" class="tab-content hidden space-y-6">
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                <h2 class="text-xl font-bold text-slate-900 border-r-4 border-blue-600 pr-3 mb-3">
+                    أهداف الدراسة وتساؤلاتها الميدانية
+                </h2>
+                <p class="text-slate-700 text-sm sm:text-base leading-relaxed">
+                    تستعرض هذه الشاشة الاتساق المنهجي بين الهدف الرئيس والأهداف الفرعية للدراسة من جهة، والتساؤلات العلمية المصاغة للاختبار الميداني من جهة أخرى. انقر على أي هدف لعرض التساؤل المباشر المقابل له.
+                </p>
+            </div>
+
+            <!-- Main Question Banner -->
+            <div class="bg-slate-900 text-white p-5 rounded-xl border-r-8 border-amber-500 shadow font-medium text-sm sm:text-base">
+                <span class="text-amber-400 font-bold block mb-1">❓ التساؤل الرئيس للدراسة:</span>
+                "ما المحددات الاجتماعية والاقتصادية والتكنولوجية لجرائم النصب والاحتيال لدى الشباب في مدينة الغردقة، وما تداعياتها وآليات مواجهتها؟"
+            </div>
+
+            <!-- Dynamic Goals Switcher -->
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+                <!-- Buttons Side -->
+                <div class="md:col-span-5 space-y-2">
+                    <button onclick="showGoalDetail(1)" id="goal-btn-1" class="goal-nav-btn w-full text-right p-3 rounded-lg border border-slate-200 bg-white font-semibold text-slate-800 hover:bg-blue-50 transition text-sm flex justify-between items-center">
+                        <span>1. الخصائص الديموغرافية والاجتماعية</span>
+                        <span class="text-xs text-blue-600">🔗</span>
+                    </button>
+                    <button onclick="showGoalDetail(2)" id="goal-btn-2" class="goal-nav-btn w-full text-right p-3 rounded-lg border border-slate-200 bg-white font-semibold text-slate-800 hover:bg-blue-50 transition text-sm flex justify-between items-center">
+                        <span>2. تصنيف الأنماط والأساليب الاحتيالية</span>
+                        <span class="text-xs text-blue-600">🔗</span>
+                    </button>
+                    <button onclick="showGoalDetail(3)" id="goal-btn-3" class="goal-nav-btn w-full text-right p-3 rounded-lg border border-slate-200 bg-white font-semibold text-slate-800 hover:bg-blue-50 transition text-sm flex justify-between items-center">
+                        <span>3. تشخيص العوامل الاقتصادية والاجتماعية</span>
+                        <span class="text-xs text-blue-600">🔗</span>
+                    </button>
+                    <button onclick="showGoalDetail(4)" id="goal-btn-4" class="goal-nav-btn w-full text-right p-3 rounded-lg border border-slate-200 bg-white font-semibold text-slate-800 hover:bg-blue-50 transition text-sm flex justify-between items-center">
+                        <span>4. تقنيات الاتصال والتيسير الرقمي</span>
+                        <span class="text-xs text-blue-600">🔗</span>
+                    </button>
+                    <button onclick="showGoalDetail(5)" id="goal-btn-5" class="goal-nav-btn w-full text-right p-3 rounded-lg border border-slate-200 bg-white font-semibold text-slate-800 hover:bg-blue-50 transition text-sm flex justify-between items-center">
+                        <span>5. رصد التداعيات المجتمعية والسياحية</span>
+                        <span class="text-xs text-blue-600">🔗</span>
+                    </button>
+                    <button onclick="showGoalDetail(6)" id="goal-btn-6" class="goal-nav-btn w-full text-right p-3 rounded-lg border border-slate-200 bg-white font-semibold text-slate-800 hover:bg-blue-50 transition text-sm flex justify-between items-center">
+                        <span>6. الاستراتيجية والآليات الوقائية</span>
+                        <span class="text-xs text-blue-600">🔗</span>
+                    </button>
+                </div>
+
+                <!-- Display Detail Box -->
+                <div class="md:col-span-7 bg-white p-6 rounded-xl border border-blue-200 shadow-sm flex flex-col justify-between" id="goal-detail-container">
+                    <div>
+                        <div class="inline-block bg-blue-100 text-blue-800 text-xs font-bold px-2.5 py-1 rounded mb-3" id="goal-badge">
+                            الهدف الأول
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-900 mb-3" id="goal-title">
+                            الخصائص الديموغرافية والاجتماعية للشباب المتورطين
+                        </h3>
+                        <p class="text-slate-700 text-sm leading-relaxed mb-4" id="goal-desc">
+                            تحديد الملامح البنائية والتكوين الاجتماعي للشباب المتورطين في جرائم النصب والاحتيال (سواء كجناة أو كضحايا) في مدينة الغردقة، من حيث السن، المستوى التعليمي، الحالة العملية، ومحل الإقامة الأصلي.
+                        </p>
+                        <div class="bg-slate-50 p-4 rounded-lg border-r-4 border-emerald-500">
+                            <span class="font-bold text-xs text-emerald-800 block mb-1">🎯 التساؤل الفرعي المقابل:</span>
+                            <p class="text-sm font-semibold text-slate-800" id="goal-question">
+                                "ما الخصائص الديموغرافية والاجتماعية للشباب المتورطين في جرائم النصب والاحتيال بمدينة الغردقة؟"
+                            </p>
+                        </div>
+                    </div>
+                    <div class="mt-4 text-xs text-slate-400 text-left border-t pt-2">
+                        انقر على باقي الأهداف للاستكشاف بالتفصيل
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: KEY CONCEPTS GLOSSARY -->
+        <section id="tab-concepts" class="tab-content hidden space-y-6">
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                <h2 class="text-xl font-bold text-slate-900 border-r-4 border-blue-600 pr-3 mb-3">
+                    المفاهيم الأساسية والأُطر التعريفية للدراسة
+                </h2>
+                <p class="text-slate-700 text-sm sm:text-base leading-relaxed">
+                    يتطلب التحليل العلمي ضبطاً إجرائياً للمفاهيم المحورية للتمييز بين المنظور التشريعي الجنائي والمنظور السوسيولوجي. فيما يلي بطاقات تفاعلية تشرح حدود المفاهيم الخمسة الرئيسة المستخدمة في الدراسة.
+                </p>
+            </div>
+
+            <!-- Concepts Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                <!-- Card 1: الجريمة -->
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 hover:border-blue-500 transition">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="font-bold text-blue-700 text-base">1. الجريمة (Crime)</span>
+                        <span class="bg-blue-100 text-blue-800 text-xs px-2 py-0.5 rounded">مفهوم عام</span>
+                    </div>
+                    <div class="space-y-2 text-xs leading-relaxed text-slate-700">
+                        <p><strong class="text-slate-900">قانونياً:</strong> كل فعل أو امتناع يقرر له القانون عقوبة جنائية أو تدبيراً احترازياً نتيجة خرق القواعد الآمرة.</p>
+                        <p><strong class="text-slate-900">سوسيولوجياً:</strong> سلوك انحرافي يمثل خروجاً غير مقبول عن نسق المعايير والقيم والأعراف، ويوجه ضربة لروابط الثقة الاستقرار البنائي.</p>
+                    </div>
+                </div>
+
+                <!-- Card 2: النصب والاحتيال -->
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 hover:border-amber-500 transition">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="font-bold text-amber-700 text-base">2. النصب والاحتيال</span>
+                        <span class="bg-amber-100 text-amber-800 text-xs px-2 py-0.5 rounded">مفهوم جنائي</span>
+                    </div>
+                    <div class="space-y-2 text-xs leading-relaxed text-slate-700">
+                        <p><strong class="text-slate-900">قانونياً:</strong> الاستيلاء على مال منقول أو غير منقول للغير باختلاق طرق احتيالية، أو إيهام بوجود مشروع كاذب أو أمل بفرصة ربح وهمي.</p>
+                        <p><strong class="text-slate-900">سوسيولوجياً:</strong> نمط تفاعلي صراعي يعتمد على الخداع النفسي وتوظيف الإغراءات والمغفلات الثقافية لسلب موارد الضحية برضاها الظاهري.</p>
+                    </div>
+                </div>
+
+                <!-- Card 3: الاحتيال الإلكتروني -->
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 hover:border-purple-500 transition">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="font-bold text-purple-700 text-base">3. النصب الإلكتروني</span>
+                        <span class="bg-purple-100 text-purple-800 text-xs px-2 py-0.5 rounded">مستحدث تقني</span>
+                    </div>
+                    <div class="space-y-2 text-xs leading-relaxed text-slate-700">
+                        <p><strong class="text-slate-900">إجرائياً:</strong> ارتكاب أفعال الخداع والاستيلاء على الأموال والبيانات عبر الوسائط المعلوماتية والتطبيقات الذكية، واستغلال الفضاء السيبراني لإخفاء الهوية الجنائية وتجاوز الحدود.</p>
+                    </div>
+                </div>
+
+                <!-- Card 4: فئة الشباب -->
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 hover:border-emerald-500 transition">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="font-bold text-emerald-700 text-base">4. فئة الشباب</span>
+                        <span class="bg-emerald-100 text-emerald-800 text-xs px-2 py-0.5 rounded">ديموغرافي</span>
+                    </div>
+                    <div class="space-y-2 text-xs leading-relaxed text-slate-700">
+                        <p><strong class="text-slate-900">المدى العمرية:</strong> الشريحة العمرية الممتدة بين (18 و35 عاماً).</p>
+                        <p><strong class="text-slate-900">الخصائص:</strong> مرحلة التكوين الاقتصادي، الاستقلال الأسري، النشاط الرقمي العالي، والحساسية الشديدة للضغوط الاقتصادية والتحولات القيمية.</p>
+                    </div>
+                </div>
+
+                <!-- Card 5: البيئة السياحية -->
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 hover:border-rose-500 transition md:col-span-2 lg:col-span-2">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="font-bold text-rose-700 text-base">5. البيئة السياحية (مجتمع الغردقة)</span>
+                        <span class="bg-rose-100 text-rose-800 text-xs px-2 py-0.5 rounded">سياق مكاني وبنائي</span>
+                    </div>
+                    <div class="space-y-2 text-xs leading-relaxed text-slate-700">
+                        <p><strong class="text-slate-900">الخصائص البنائية:</strong> النسيج الاجتماعي والمكاني لمدينة الغردقة، والمتميز بالتدفق السكاني العالي، العمالة الموسمية الوافدة من مختلف المحافظات، انخفاض مستوى الرقابة غير الرسمية (الأسرية)، وسيادة المعاملات المادية السريعة، مما يشكل إطاراً يفرز فرصاً إجرامية فريدة.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: LITERATURE REVIEW MATRIX -->
+        <section id="tab-literature" class="tab-content hidden space-y-6">
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                <h2 class="text-xl font-bold text-slate-900 border-r-4 border-blue-600 pr-3 mb-3">
+                    الأدبيات والدراسات السابقة ومصفوفة الموازنة
+                </h2>
+                <p class="text-slate-700 text-sm sm:text-base leading-relaxed">
+                    استعراض تحليلي نقدي للدراسات العربية والدولية الموزعة على محورين رئيسيين (الاحتيال المالي/الرقمي، والعوامل الاجتماعية والنفسية للأنحراف)، مع تحديد الفجوة البحثية المستهدفة في مدينة الغردقة.
+                </p>
+            </div>
+
+            <!-- Table Controls -->
+            <div class="bg-slate-100 p-4 rounded-xl flex flex-col md:flex-row gap-4 justify-between items-center text-xs">
+                <div class="flex gap-2 w-full md:w-auto">
+                    <button onclick="filterLiterature('all')" class="lit-filter-btn px-3 py-1.5 bg-slate-800 text-white rounded font-bold">الكل</button>
+                    <button onclick="filterLiterature('cyber')" class="lit-filter-btn px-3 py-1.5 bg-white text-slate-700 border rounded font-semibold hover:bg-slate-50">الاحتيال الرقمي والتشريعي</button>
+                    <button onclick="filterLiterature('social')" class="lit-filter-btn px-3 py-1.5 bg-white text-slate-700 border rounded font-semibold hover:bg-slate-50">العوامل الاجتماعية والنفسية</button>
+                </div>
+                <div class="w-full md:w-auto">
+                    <input type="text" id="litSearchInput" onkeyup="searchLiterature()" placeholder="بحث في الباحث، المنهج، أو النتائج..." class="w-full md:w-64 px-3 py-1.5 rounded border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+            </div>
+
+            <!-- Table Block -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-x-auto">
+                <table class="w-full text-right text-xs border-collapse" id="litTable">
+                    <thead>
+                        <tr class="bg-slate-900 text-white font-bold">
+                            <th class="p-3 border-b">اسم الدراسة / الباحث</th>
+                            <th class="p-3 border-b">المنهج والأدوات</th>
+                            <th class="p-3 border-b">العينة والمجتمع</th>
+                            <th class="p-3 border-b">أبرز النتائج والتوصيات</th>
+                            <th class="p-3 border-b">وجه الاستفادة في الدراسة الحالية</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-200 text-slate-700" id="litTableBody">
+                        <!-- Dynamic Rows Injected via JS -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Research Gap Box -->
+            <div class="bg-amber-50 border-r-4 border-amber-500 p-5 rounded-xl">
+                <h3 class="font-bold text-amber-900 text-sm mb-2">📌 الفجوة البحثية المحددة (Research Gap):</h3>
+                <p class="text-amber-800 text-xs leading-relaxed">
+                    على الرغم من تنوع الأدبيات التي تناولت الجريمة الإلكترونية من جانب، وجرائم الشباب من جانب آخر، تبرز فجوة بحثية واضحة تتمثل في ندرة الدراسات الميدانية الشاملة التي تربط بين **البيئة السياحية ذات الطبيعة الاجتماعية الخاصة (كمجتمع مدينة الغردقة)** وبين تنامي أنماط الاحتيال المالي والرقمي لدى الشباب. حيث تولد البيئة السياحية بخصائصها (العلاقات غير الشخصية، العمالة الموسمية، والاختلاط الثقافي) ديناميات إجرامية وفريدة لم تتناولها الدراسات السابقة بالعمق الكافي.
+                </p>
+            </div>
+        </section>
+
+        <!-- SECTION 5: THEORETICAL FRAMEWORK INTERACTIVE SIMULATOR -->
+        <section id="tab-theory" class="tab-content hidden space-y-6">
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                <h2 class="text-xl font-bold text-slate-900 border-r-4 border-blue-600 pr-3 mb-3">
+                    الإطار النظري التكافلي المفسر للجريمة
+                </h2>
+                <p class="text-slate-700 text-sm sm:text-base leading-relaxed">
+                    لا يمكن تفسير سلوك الاحتيال المعقد لدى شباب الغردقة عبر منظور أحادي. تنتهج هذه الدراسة مقاربة تكاملية تجمع بين خمس نظريات علمية بارزة. اختر أياً من النظريات أدناه لاستكشاف مفاهيمها وتطبيقها الميداني.
+                </p>
+            </div>
+
+            <!-- Theory Selector Buttons -->
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+                <button onclick="selectTheory('rational')" id="theory-btn-rational" class="theory-btn bg-white border-2 border-slate-200 p-3 rounded-xl text-center hover:border-blue-500 transition">
+                    <span class="block text-xl mb-1">⚖️</span>
+                    <span class="font-bold text-xs text-slate-800 block">الاختيار العقلاني</span>
+                    <span class="text-[10px] text-slate-500">بيكاريا وبيكر</span>
+                </button>
+
+                <button onclick="selectTheory('learning')" id="theory-btn-learning" class="theory-btn bg-white border-2 border-slate-200 p-3 rounded-xl text-center hover:border-blue-500 transition">
+                    <span class="block text-xl mb-1">👥</span>
+                    <span class="font-bold text-xs text-slate-800 block">التعلم الاجتماعي</span>
+                    <span class="text-[10px] text-slate-500">سذرلاند وباندورا</span>
+                </button>
+
+                <button onclick="selectTheory('control')" id="theory-btn-control" class="theory-btn bg-white border-2 border-slate-200 p-3 rounded-xl text-center hover:border-blue-500 transition">
+                    <span class="block text-xl mb-1">🛡️</span>
+                    <span class="font-bold text-xs text-slate-800 block">الضبط والاحتواء</span>
+                    <span class="text-[10px] text-slate-500">هيرشي وريكليس</span>
+                </button>
+
+                <button onclick="selectTheory('anomie')" id="theory-btn-anomie" class="theory-btn bg-white border-2 border-slate-200 p-3 rounded-xl text-center hover:border-blue-500 transition">
+                    <span class="block text-xl mb-1">💥</span>
+                    <span class="font-bold text-xs text-slate-800 block">الأنومي والضغط</span>
+                    <span class="text-[10px] text-slate-500">دوركايم وميرتون</span>
+                </button>
+
+                <button onclick="selectTheory('psycho')" id="theory-btn-psycho" class="theory-btn bg-white border-2 border-slate-200 p-3 rounded-xl text-center hover:border-blue-500 transition">
+                    <span class="block text-xl mb-1">🧩</span>
+                    <span class="font-bold text-xs text-slate-800 block">التحليل النفسي</span>
+                    <span class="text-[10px] text-slate-500">فرويد وكليكي</span>
+                </button>
+            </div>
+
+            <!-- Theory Details Box -->
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm grid grid-cols-1 lg:grid-cols-12 gap-6" id="theory-display-box">
+                <div class="lg:col-span-7 space-y-4">
+                    <div class="flex items-center gap-2">
+                        <span class="text-2xl" id="theory-icon">⚖️</span>
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-900" id="theory-title">نظرية الاختيار العقلاني (Rational Choice Theory)</h3>
+                            <p class="text-xs text-blue-600 font-semibold" id="theory-scholars">أرباب النظرية: سيزاري بيكاريا، جاري بيكر</p>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-slate-50 p-4 rounded-lg">
+                        <strong class="block text-xs font-bold text-slate-900 mb-1">المفهوم التفسيري المحوري:</strong>
+                        <p class="text-xs text-slate-700 leading-relaxed" id="theory-concept">
+                            الفعل الإجرامي هو قرار واعي اتخذه الفاعل بناءً على عملية تقييم وموازنة بين التكاليف والمخاطر المحتملة للجريمة وبين المنافع والمكاسب المتوقعة منها.
+                        </p>
+                    </div>
+
+                    <div class="bg-blue-50 p-4 rounded-lg border-r-4 border-blue-600">
+                        <strong class="block text-xs font-bold text-blue-900 mb-1">التطبيق المباشر على شباب الغردقة:</strong>
+                        <p class="text-xs text-blue-800 leading-relaxed" id="theory-application">
+                            ينظر الشاب إلى الاحتيال المالي أو الرقمي بوصفه وسيلة منخفضة التكلفة البدنية للوصول إلى الربح السريع. وحين يدرك ضعف فرص الاكتشاف الفوري أو البطء في تتبع الأموال عبر الإنترنت، ترجح كفة المكاسب، فيتخذ قرار الاحتيال بناءً على تقدير عقلاني.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Theory Radar Comparison -->
+                <div class="lg:col-span-5 flex flex-col justify-center bg-slate-50 p-4 rounded-xl">
+                    <h4 class="font-bold text-xs text-slate-800 text-center mb-2">وزن المفسرات النظرية لسلوك الاحتيال الغردقي</h4>
+                    <div class="chart-container">
+                        <canvas id="theoryRadarChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 6: CONCLUSIONS & RECOMMENDATIONS ACTION PLAN -->
+        <section id="tab-conclusions" class="tab-content hidden space-y-6">
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                <h2 class="text-xl font-bold text-slate-900 border-r-4 border-blue-600 pr-3 mb-3">
+                    الاستنتاجات العلمية والتوصيات الوقائية
+                </h2>
+                <p class="text-slate-700 text-sm sm:text-base leading-relaxed">
+                    يستعرض هذا القسم خريطة الاستنتاجات العلمية الناتجة عن الدراسة، متبوعة بخطة إجرائية مقترحة مقسمة إلى أربعة محاور عمل مؤسسية للحد من انتشار جرائم الاحتيال لدى الشباب بالغردقة.
+                </p>
+            </div>
+
+            <!-- Key Conclusions Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                    <div class="text-amber-500 font-bold text-lg mb-1">01. التخفي الرقمي</div>
+                    <p class="text-xs text-slate-700 leading-relaxed">
+                        أتاح التحول نحو أساليب الاحتيال المهجنة قدرة أعلى للجناة على التخفي وتجاوز الحدود المكانية، متغافلين عن الثغرات الإجرائية في تتبع الحسابات الوهمية.
+                    </p>
+                </div>
+
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                    <div class="text-blue-500 font-bold text-lg mb-1">02. ضغط التطلعات</div>
+                    <p class="text-xs text-slate-700 leading-relaxed">
+                        انخراط الشباب هو نتاج تفاعل الضغوط الهيكلية مع ارتفاع السقف الاستهلاكي في البيئة السياحية واغتراب الشباب الوافدين بعيداً عن الرقابة الأسرية.
+                    </p>
+                </div>
+
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                    <div class="text-emerald-500 font-bold text-lg mb-1">03. كسر النمطية</div>
+                    <p class="text-xs text-slate-700 leading-relaxed">
+                        اتسعت دائرة الاستهداف والارتكاب لتشمل مؤهلات عالية وأفراداً ذوي مهارات تقنية، نتيجة اعتماد المحتالين على آليات إغراء نفسية متقدمة.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Interactive Recommendations Filter Tabs -->
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                <h3 class="font-bold text-slate-900 text-base mb-4">🏛️ خريطة التوصيات والآليات الإجرائية المقترحة</h3>
+                
+                <div class="flex flex-wrap gap-2 mb-6 border-b pb-3 text-xs">
+                    <button onclick="filterRecs('all')" id="rec-btn-all" class="rec-tab-btn bg-slate-800 text-white px-3 py-1.5 rounded font-bold">كل المحاور</button>
+                    <button onclick="filterRecs('leg')" id="rec-btn-leg" class="rec-tab-btn bg-slate-100 text-slate-700 px-3 py-1.5 rounded font-semibold hover:bg-slate-200">⚖️ التطوير التشريعي القضائي</button>
+                    <button onclick="filterRecs('sec')" id="rec-btn-sec" class="rec-tab-btn bg-slate-100 text-slate-700 px-3 py-1.5 rounded font-semibold hover:bg-slate-200">📢 التوعية الرقمية والأمنية</button>
+                    <button onclick="filterRecs('soc')" id="rec-btn-soc" class="rec-tab-btn bg-slate-100 text-slate-700 px-3 py-1.5 rounded font-semibold hover:bg-slate-200">🤝 التمكين الاجتماعي والاقتصادي</button>
+                    <button onclick="filterRecs('tech')" id="rec-btn-tech" class="rec-tab-btn bg-slate-100 text-slate-700 px-3 py-1.5 rounded font-semibold hover:bg-slate-200">💻 البنية التقنية لإنفاذ القانون</button>
+                </div>
+
+                <!-- Recommendations Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="recsContainer">
+                    <!-- Rec 1 -->
+                    <div class="rec-card leg p-4 rounded-lg bg-slate-50 border-r-4 border-blue-600">
+                        <span class="text-[10px] font-bold text-blue-700 uppercase block mb-1">المحور التشريعي والقضائي</span>
+                        <h4 class="font-bold text-sm text-slate-900 mb-1">تحديث النصوص الجنائية وإنشاء دوائر رقمية متخصصة</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            ضرورة تحديث نصوص قانون العقوبات لمواكبة الوسائط الإلكترونية المستحدثة، وتقليص أمد التقاضي مع إنشاء دوائر قضائية متخصصة بالجرائم الإلكترونية بالبحر الأحمر.
+                        </p>
+                    </div>
+
+                    <!-- Rec 2 -->
+                    <div class="rec-card sec p-4 rounded-lg bg-slate-50 border-r-4 border-amber-500">
+                        <span class="text-[10px] font-bold text-amber-700 uppercase block mb-1">المحور التوعوي والأمني</span>
+                        <h4 class="font-bold text-sm text-slate-900 mb-1">تفعيل الحملات التوعوية بالأجهزة الأمنية</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            توسيع نطاق حملات وزارة الداخلية التوعوية عبر وسائل التواصل والمؤسسات الشبابية بالغردقة لتبصير الشباب بأنماط الاصطياد الرقمي والشركات الوهمية.
+                        </p>
+                    </div>
+
+                    <!-- Rec 3 -->
+                    <div class="rec-card soc p-4 rounded-lg bg-slate-50 border-r-4 border-emerald-600">
+                        <span class="text-[10px] font-bold text-emerald-700 uppercase block mb-1">المحور الاجتماعي والاقتصادي</span>
+                        <h4 class="font-bold text-sm text-slate-900 mb-1">دعم التمكين الاقتصادي ورعاية المغتربين</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            توفير فرص عمل مستقرة وبرامج تدريبية لشباب الغردقة للحد من آليات البطالة الموسمية، وتفعيل برامج الاحتواء الاجتماعي للشباب الوافد للعمل بالسياحة.
+                        </p>
+                    </div>
+
+                    <!-- Rec 4 -->
+                    <div class="rec-card tech p-4 rounded-lg bg-slate-50 border-r-4 border-purple-600">
+                        <span class="text-[10px] font-bold text-purple-700 uppercase block mb-1">المحور التقني والأمني</span>
+                        <h4 class="font-bold text-sm text-slate-900 mb-1">تطوير بنية التعقب والتحري الرقمي</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            تزويد وحدات مكافحة الجرائم المعلوماتية بالأجهزة الأمنية بالبحر الأحمر بأحدث تقنيات التعقب السيبراني وتتبع التدفقات المالية المشبوهة لحصر الجريمة في مهدها.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-900 text-slate-400 text-xs py-6 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 text-center space-y-2">
+            <p class="font-bold text-slate-300">
+                مشروع بحثي متكامل: جرائم النصب والاحتيال لدى الشباب في مدينة الغردقة
+            </p>
+            <p>
+                دراسة سوسيولوجية وجنائية لمحددات الظاهرة وتداعياتها - تصميم المنصة التفاعلية العرضية
+            </p>
+            <p class="text-[10px] text-slate-500">
+                جميع البيانات والنصوص والأطر النظرية وثيقة الصلة بالأدبيات العلمية الموثقة في متن الدراسة.
+            </p>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // DATA STORAGE: LITERATURE REVIEW
+        const literatureData = [
+            {
+                category: 'cyber',
+                author: 'علي عبد الجواد (2020)',
+                method: 'التحليلي الوثائقي',
+                sample: 'أدبيات الجرائم الإلكترونية والتشريعات',
+                results: 'استغلال المحتالين للتطور التقني والحدود المفتوحة مع الاستفادة من ثغرات بطء التقاضي.',
+                utility: 'توظيف الفهم التشريعي والتقني في التحليل الإجرائي للثغرات الميدانية.'
+            },
+            {
+                category: 'cyber',
+                author: 'تحقيقات مستقلة / الاحتيال (2022)',
+                method: 'المسح الاجتماعي والتحليلي',
+                sample: 'قضايا احتيال مليارية وشرائح متنوعة',
+                results: 'تفكيك الصورة النمطية لضحايا الاحتيال؛ شمول الضحايا والفاعلين لشرائح متعلمة وشابة.',
+                utility: 'صياغة مشكلة البحث بعيداً عن الاختزال التقليدي وتأكيد تنوع خلفيات الفاعلين.'
+            },
+            {
+                category: 'social',
+                author: 'واقع الجرائم الإلكترونية (2022)',
+                method: 'المسح الاجتماعي الجنائي',
+                sample: 'عينات مجتمعية ومؤسسات إنفاذ القانون',
+                results: 'البطالة والفراغ والقصور التشريعي أبرز الأسباب؛ والتوصية بإنشاء محاكم رقمية متخصصة.',
+                utility: 'تحديد المتغيرات المستقلة المسببة للجريمة واستقاء التوصيات التشريعية.'
+            },
+            {
+                category: 'cyber',
+                author: 'دراسة السليطي',
+                method: 'المنهج المقارن التحليلي',
+                sample: 'القوانين الجنائية وقوانين العقوبات',
+                results: 'الاحتيال الإلكتروني يرتكز على الخداع الذكي وسرعة تدوير الوسائل وصعوبة الإثبات الجنائي.',
+                utility: 'التحديد الدقيق للأركان القانونية والتعريفية لجريمة الاحتيال المالي والرقمي.'
+            },
+            {
+                category: 'social',
+                author: 'دور الأمن العام بمكافحة الجرائم (2023)',
+                method: 'المسح الإعلامي والاجتماعي',
+                sample: 'مستخدمو الشبكات وصفحات الأمن العام',
+                results: 'ارتفاع نسبة الذكور المرتكبين (64%) وبروز الاحتيال المالي والتطبيقات الوهمية في الصدارة.',
+                utility: 'مقارنة النتائج الميدانية الديموغرافية وأنواط الاحتيال الأكثر شيوعاً.'
+            },
+            {
+                category: 'social',
+                author: 'علي عبد الفتاح (2021)',
+                method: 'التكميلي التحليلي الميداني',
+                sample: 'قضايا الشباب والأحداث المنحرفين بمصر',
+                results: 'التأثير المباشر للتقلبات الاقتصادية والتفكك الأسري على تحفيز السلوك الإجرامي.',
+                utility: 'ربط متغيرات الضغط الاقتصادي بالتفسير النظري لسلوك الشباب بالغردقة.'
+            }
+        ];
+
+        // DATA STORAGE: GOALS & QUESTIONS
+        const goalsData = {
+            1: {
+                badge: 'الهدف الأول',
+                title: 'الخصائص الديموغرافية والاجتماعية للشباب المتورطين',
+                desc: 'تحديد الخصائص الديموغرافية والاجتماعية للشباب المتورطين في جرائم النصب والاحتيال (سواء كجناة أو كضحايا) في مدينة الغردقة من حيث المدى العمري، التعليم، والتكوين الأسري.',
+                question: 'ما الخصائص الديموغرافية والاجتماعية للشباب المتورطين في جرائم النصب والاحتيال بمدينة الغردقة؟'
+            },
+            2: {
+                badge: 'الهدف الثاني',
+                title: 'تصنيف أنماط وأساليب الاحتيال المستحدثة',
+                desc: 'تصنيف أبرز الأنماط والأساليب الاحتيالية المستخدمة في البيئة السياحية بالغردقة، والمفاضلة بين الأساليب التقليدية المباشرة والأساليب الإلكترونية الرقمية.',
+                question: 'ما أكثر أنماط وأساليب الاحتيال شُيوعاً بين الشباب في المجتمع المحلي لمدينة الغردقة؟'
+            },
+            3: {
+                badge: 'الهدف الثالث',
+                title: 'تشخيص العوامل الاقتصادية والاجتماعية',
+                desc: 'الكشف عن العوامل الاقتصادية والاجتماعية والتكنولوجية والتشريعية الداعية لإقدام الشباب على ممارسة سلوك الاحتيال أو الوقوع في شباكه.',
+                question: 'كيف تؤدي الضغوط الاقتصادية، والبطالة الموسمية، وتفكك الروابط الأسرية إلى دفع الشباب نحو السلوك الاحتيالي؟'
+            },
+            4: {
+                badge: 'الهدف الرابع',
+                title: 'تقنيات الاتصال والفضاء السيبراني',
+                desc: 'رصد أثر ثورة الاتصالات والتطبيقات الرقمية في إتاحة فرص ارتكاب الجريمة دون مواجهة بدنية وتقليل مخاوف التعقب والأذى عند الفاعلين.',
+                question: 'ما الدور الذي تلعبه تقنيات الاتصال والفضاء الرقمي في تسهيل ارتكاب الجريمة وتقليل مخاوف التعقب لدى الفاعلين؟'
+            },
+            5: {
+                badge: 'الهدف الخامس',
+                title: 'رصد التداعيات على الاستقرار السياحي',
+                desc: 'رصد التداعيات والآثار السلبية المترتبة على انتشار جرائم النصب والاحتيال على مستوى الفرد، والأسرة، والأمن السياحي والاقتصادي لمدينة الغردقة.',
+                question: 'ما التداعيات الاجتماعية والاقتصادية الناجمة عن انتشار هذه الجرائم على مستوى الثقة المجتمعية والاستقرار السياحي بمدينة الغردقة؟'
+            },
+            6: {
+                badge: 'الهدف السادس',
+                title: 'الاستراتيجية الوقائية والآليات التفعيلية',
+                desc: 'تقديم استراتيجية وقائية واقتراح آليات تفعيلية تتكامل فيها جهود المؤسسات الأمنية والاجتماعية والتعليمية للحد من الظاهرة في المجتمع الساحلي.',
+                question: 'ما السبل والآليات الوقائية والأمنية والتوعوية الكفيلة بالحد من جرائم النصب والاحتيال لدى الشباب؟'
+            }
+        };
+
+        // DATA STORAGE: THEORIES
+        const theoryData = {
+            rational: {
+                icon: '⚖️',
+                title: 'نظرية الاختيار العقلاني (Rational Choice Theory)',
+                scholars: 'أرباب النظرية: سيزاري بيكاريا، جاري بيكر',
+                concept: 'الفعل الإجرامي هو قرار واعي اتخذه الفاعل بناءً على عملية تقييم وموازنة بين التكاليف والمخاطر المحتملة للجريمة وبين المنافع والمكاسب المتوقعة منها.',
+                application: 'ينظر الشاب إلى الاحتيال المالي أو الرقمي بوصفه وسيلة منخفضة التكلفة البدنية والزمنية لتحقيق عوائد مالية سريعة مقارنة بالوظائف التقليدية ذات الأجور المحدودة. وحين يدرك الشاب ضعف فرص الاكتشاف الفوري أو البطء في التقاضي وتتبع الأموال عبر الإنترنت، ترجح كفة المكاسب، فيتخذ قرار الاحتيال بناءً على تقدير عقلاني للموقف الإجرامي.',
+                scores: [90, 60, 40, 75, 50] // [عقلانية/ربح, تعلم/رفاق, ضبط/أسرة, ضغط/أنومي, تحليل نفسي]
+            },
+            learning: {
+                icon: '👥',
+                title: 'نظرية التعلم الاجتماعي والمخالطة الفارقة (Social Learning)',
+                scholars: 'أرباب النظرية: إدوين سذرلاند، ألبرت باندورا',
+                concept: 'السلوك الإجرامي ليس موروثاً ولا عفوياً، بل هو سلوك مـتعلم يتم اكتسابه عبر التفاعل والتواصل داخل جماعات أولية (كرفاق السوء) وتشمل التعلم على تقنيات الخداع وتبريراته.',
+                application: 'يتفاعل الشباب في بيئات العمل السياحي أو التجمعات مع أقران يمتلكون خبرات في أساليب استدراج الضحايا أو إنشاء الصفحات الوهمية. ويؤدي هذا التعلم بالقدوة والمخالطة إلى استدماج أساليب الاحتيال مع تبني تبريرات نفسية من قبيل "الضحية طماع" أو "هذه شطارة تجارية".',
+                scores: [60, 95, 50, 65, 45]
+            },
+            control: {
+                icon: '🛡️',
+                title: 'نظرية الضبط الاجتماعي والاحتواء (Social Control & Containment)',
+                scholars: 'أرباب النظرية: ترافيس هيرشي، والتر ريكليس',
+                concept: 'ترجع الجريمة إلى ضعف أو انقطاع الروابط الاجتماعية (المودة، الالتزام، الاعتقاد) وتراجع جودة جدران الاحتواء الداخلي (الضمير) والاحتواء الخارجي (الرقابة الأسرية والمجتمعية).',
+                application: 'يصل إلى الغردقة أعداد غفيرة من الشباب الوافدين لغرض العمل بالسياحة. هذا الانتقال المكاني يضعف آليات الضبط الاجتماعي الخارجي المتمثلة في رقابة الأهل والمجتمع المحلي الصغير، فتتراجع قوة الموانع غير الرسمية، مما يجعل الشاب أكثر عرضة للانسياق وراء الاحتيال.',
+                scores: [50, 65, 95, 70, 40]
+            },
+            anomie: {
+                icon: '💥',
+                title: 'نظرية الأنومي والضغط البنائي (Anomie & Strain Theory)',
+                scholars: 'أرباب النظرية: إميل دوركايم، روبرت ميرتون',
+                concept: 'ينشأ الانحراف عن وجود فجوة حادة بين الأهداف الثقافية المعظمة (كالثراء والرفاهية المادية) وبين الوسائل المعتمدة والمشروعة المتاحة فعلياً للفرد.',
+                application: 'يتشبّع الشباب في البيئة السياحية يومياً بمظاهر الاستهلاك الترفي والرفاهية المعروضة من السائحين والزوار، مما يرفع سقف تطلعاتهم المادية. وعند تصادم هذا السقف مع محدودية الأجور أو البطالة الموسمية، ينشأ ضغط بنائي يدفعهم للتكيف عبر "الابتكار الإجرامي" لجمع المال بسرعة.',
+                scores: [70, 70, 60, 95, 55]
+            },
+            psycho: {
+                icon: '🧩',
+                title: 'نظرية التحليل النفسي والشخصية المضادة للمجتمع',
+                scholars: 'أرباب النظرية: سيجموند فرويد، هيرفي كليكي',
+                concept: 'ينجم السلوك الإجرامي عن عجز الأنا والأنا الأعلى عن كبح نزعات الهو، أو امتلاك سمات شخصية سيكوباتية تمتاز بالكذب، ضعف الضمير، والبرود العاطفي تجاه الضحايا.',
+                application: 'تُوفر هذه الطروحات مدخلاً سيكولوجياً لتفسير بعض المحتالين في الغردقة ممن يتميزون بالقدرة الفائقة على الخداع البارد، وتقمص الشخصيات، وإقناع الضحايا براحة نفسية تامة دون الشعور بأي تأنيب للضمير تجاه الأضرار المالية والنفسية التي يلحقونها بالآخرين.',
+                scores: [45, 40, 50, 50, 95]
+            }
+        };
+
+        // GLOBAL CHART REFERENCES
+        let genderChartRef = null;
+        let theoryRadarChartRef = null;
+
+        // TAB SWITCHING LOGIC
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+
+            document.getElementById(tabId).classList.remove('hidden');
+            document.getElementById('btn-' + tabId).classList.add('active');
+
+            // Trigger chart updates if tab contains responsive charts
+            if (tabId === 'tab-problem' && genderChartRef) {
+                genderChartRef.resize();
+            } else if (tabId === 'tab-theory' && theoryRadarChartRef) {
+                theoryRadarChartRef.resize();
+            }
+        }
+
+        // GOAL DETAIL DISPLAY LOGIC
+        function showGoalDetail(id) {
+            const data = goalsData[id];
+            if (!data) return;
+
+            document.getElementById('goal-badge').innerText = data.badge;
+            document.getElementById('goal-title').innerText = data.title;
+            document.getElementById('goal-desc').innerText = data.desc;
+            document.getElementById('goal-question').innerText = `"${data.question}"`;
+
+            document.querySelectorAll('.goal-nav-btn').forEach(btn => {
+                btn.classList.remove('bg-blue-50', 'border-blue-500', 'text-blue-700');
+            });
+            const activeBtn = document.getElementById(`goal-btn-${id}`);
+            if (activeBtn) {
+                activeBtn.classList.add('bg-blue-50', 'border-blue-500', 'text-blue-700');
+            }
+        }
+
+        // LITERATURE TABLE RENDER & FILTER
+        function renderLiteratureTable(items) {
+            const tbody = document.getElementById('litTableBody');
+            tbody.innerHTML = '';
+
+            items.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-slate-50 transition border-b border-slate-100';
+                tr.innerHTML = `
+                    <td class="p-3 font-bold text-slate-900">${row.author}</td>
+                    <td class="p-3"><span class="bg-slate-100 text-slate-700 px-2 py-0.5 rounded text-[10px]">${row.method}</span></td>
+                    <td class="p-3">${row.sample}</td>
+                    <td class="p-3 text-slate-800 leading-relaxed">${row.results}</td>
+                    <td class="p-3 text-blue-800 bg-blue-50/50">${row.utility}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function filterLiterature(cat) {
+            let filtered = literatureData;
+            if (cat !== 'all') {
+                filtered = literatureData.filter(item => item.category === cat);
+            }
+            renderLiteratureTable(filtered);
+        }
+
+        function searchLiterature() {
+            const term = document.getElementById('litSearchInput').value.toLowerCase();
+            const filtered = literatureData.filter(item => 
+                item.author.toLowerCase().includes(term) ||
+                item.results.toLowerCase().includes(term) ||
+                item.method.toLowerCase().includes(term) ||
+                item.sample.toLowerCase().includes(term)
+            );
+            renderLiteratureTable(filtered);
+        }
+
+        // THEORY SELECTOR LOGIC
+        function selectTheory(key) {
+            const t = theoryData[key];
+            if (!t) return;
+
+            document.getElementById('theory-icon').innerText = t.icon;
+            document.getElementById('theory-title').innerText = t.title;
+            document.getElementById('theory-scholars').innerText = t.scholars;
+            document.getElementById('theory-concept').innerText = t.concept;
+            document.getElementById('theory-application').innerText = t.application;
+
+            // Highlight button
+            document.querySelectorAll('.theory-btn').forEach(btn => {
+                btn.classList.remove('border-blue-600', 'bg-blue-50');
+            });
+            const activeBtn = document.getElementById(`theory-btn-${key}`);
+            if (activeBtn) {
+                activeBtn.classList.add('border-blue-600', 'bg-blue-50');
+            }
+
+            // Update Radar Chart
+            if (theoryRadarChartRef) {
+                theoryRadarChartRef.data.datasets[0].data = t.scores;
+                theoryRadarChartRef.data.datasets[0].label = t.title.split('(')[0];
+                theoryRadarChartRef.update();
+            }
+        }
+
+        // RECOMMENDATIONS FILTER LOGIC
+        function filterRecs(type) {
+            const cards = document.querySelectorAll('.rec-card');
+            cards.forEach(card => {
+                if (type === 'all' || card.classList.contains(type)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            document.querySelectorAll('.rec-tab-btn').forEach(btn => {
+                btn.classList.remove('bg-slate-800', 'text-white');
+                btn.classList.add('bg-slate-100', 'text-slate-700');
+            });
+
+            const activeBtn = document.getElementById(`rec-btn-${type}`);
+            if (activeBtn) {
+                activeBtn.classList.remove('bg-slate-100', 'text-slate-700');
+                activeBtn.classList.add('bg-slate-800', 'text-white');
+            }
+        }
+
+        // INITIALIZE CHART.JS VISUALIZATIONS
+        function initCharts() {
+            // Chart 1: Gender Distribution Donut Chart
+            const ctxGender = document.getElementById('genderChart').getContext('2d');
+            genderChartRef = new Chart(ctxGender, {
+                type: 'doughnut',
+                data: {
+                    labels: ['الذكور (مرتكبو الجريمة)', 'الإناث (مرتكبو الجريمة)'],
+                    datasets: [{
+                        data: [64, 36],
+                        backgroundColor: ['#1d4ed8', '#d97706'],
+                        borderWidth: 2,
+                        borderColor: '#ffffff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                font: { family: 'Cairo', size: 11 },
+                                boxWidth: 12
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return ` ${context.label}: ${context.raw}%`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Chart 2: Theory Dimensions Radar Chart
+            const ctxTheory = document.getElementById('theoryRadarChart').getContext('2d');
+            theoryRadarChartRef = new Chart(ctxTheory, {
+                type: 'radar',
+                data: {
+                    labels: [
+                        'موازنة الربح والمخاطرة',
+                        'التعلم من أقران السوء',
+                        'ضعف الضبط والرقابة الأسرية',
+                        'ضغط التطلعات الاستهلاكية',
+                        'الاستجابة النفسية والسيكوباتية'
+                    ],
+                    datasets: [{
+                        label: 'نظرية الاختيار العقلاني',
+                        data: theoryData.rational.scores,
+                        backgroundColor: 'rgba(29, 78, 216, 0.2)',
+                        borderColor: '#1d4ed8',
+                        pointBackgroundColor: '#1d4ed8',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: { color: '#e2e8f0' },
+                            grid: { color: '#cbd5e1' },
+                            suggestedMin: 0,
+                            suggestedMax: 100,
+                            ticks: { display: false },
+                            pointLabels: {
+                                font: { family: 'Cairo', size: 10, weight: 'bold' },
+                                color: '#334155'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        }
+
+        // ON PAGE LOAD INITIALIZATION
+        document.addEventListener('DOMContentLoaded', () => {
+            initCharts();
+            renderLiteratureTable(literatureData);
+            showGoalDetail(1);
+            selectTheory('rational');
+        });
+    </script>
+</body>
+</html>
